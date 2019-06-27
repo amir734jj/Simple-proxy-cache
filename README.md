@@ -23,6 +23,9 @@ public interface IFoo
 
 Create a cache proxy instance (use `SimpleMethodMemoryCache` or an interface that implements `ICacheMethodUtility`)
 ```csharp
+// Re-use the same instance
+var proxyGenerator = new ProxyGenerator();
+
 var cachedFoo = CacheInterceptorBuilder.New<IFoo>()
   .WithProxyGenerator(proxyGenerator)
   .WithStore(new SimpleMethodMemoryCache())
