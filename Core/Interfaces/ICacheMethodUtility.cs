@@ -4,7 +4,7 @@ namespace SimpleProxyCache.Interfaces
 {
     public interface ICacheMethodUtility
     {
-        object Get(MethodInfo methodInfo, object[] arguments);
+        bool TryGet(MethodInfo methodInfo, object[] arguments, out object result);
         
         void Set(MethodInfo methodInfo, object[] arguments, object result);
 

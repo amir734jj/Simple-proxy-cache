@@ -15,19 +15,12 @@ namespace SimpleProxyCache.Logic
             _cache = new ConcurrentDictionary<MethodInfo, ConcurrentDictionary<object[], object>>();
         }
 
-        public object Get(MethodInfo methodInfo, object[] arguments)
-        {
-            if (_cache.ContainsKey(methodInfo))
-            {
-                var table = _cache[methodInfo];
-                var keyValuePair = table.FirstOrDefault(x => x.Key.SequenceEqual(arguments));
-                
-                return keyValuePair.Equals( default(KeyValuePair<object[], object>)) ? keyValuePair.Value : null;
-            }
-
-            return null;
-        }
-
+        /// <summary>
+        ///     Set cache value
+        /// </summary>
+        /// <param name="methodInfo"></param>
+        /// <param name="arguments"></param>
+        /// <param name="result"></param>
         public void Set(MethodInfo methodInfo, object[] arguments, object result)
         {
             ConcurrentDictionary<object[], object> table;
@@ -44,6 +37,36 @@ namespace SimpleProxyCache.Logic
             }
         }
 
+        /// <summary>
+        ///     Try get value given MethodInfo and result
+        /// </summary>
+        /// <param name="methodInfo"></param>
+        /// <param name="arguments"></param>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        public bool TryGet(MethodInfo methodInfo, object[] arguments, out object result)
+        {
+            if (_cache.ContainsKey(methodInfo))
+            {
+                var table = _cache[methodInfo];
+                var keyValuePair = table.FirstOrDefault(x => x.Key.SequenceEqual(arguments));
+
+                if (!keyValuePair.Equals( default(KeyValuePair<object[], object>)))
+                {
+                    result = keyValuePair.Value;
+
+                    return true;
+                }
+            }
+
+            result = null;
+            
+            return false;
+        }
+        
+        /// <summary>
+        ///     Invalidate cache
+        /// </summary>
         public void Invalidate()
         {
             _cache = new ConcurrentDictionary<MethodInfo, ConcurrentDictionary<object[], object>>();
