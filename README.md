@@ -33,6 +33,6 @@ var cachedFoo = CacheInterceptorBuilder.New<IFoo>()
   
 cachedFoo.Handle("Hello world!");
 
-// The target method will not get called because we cache this method with "Hello world!" argument
+// The target method will not get called because we cached this method with "Hello world!" argument
 cachedFoo.Handle("Hello world!");
 ```
