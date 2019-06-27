@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+        <RootNamespace>SimpleProxyCache</RootNamespace>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Castle.Core" Version="4.4.0" />
+      <PackageReference Include="Castle.Core.AsyncInterceptor" Version="1.7.0" />
+    </ItemGroup>
+
+</Project>
