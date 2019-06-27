@@ -69,7 +69,8 @@ namespace SimpleProxyCache.Builders
         public T Build<TS>(TS instance) where TS : T
         {
             return (T) _proxyGenerator.CreateInterfaceProxyWithTargetInterface
-            (_type,
+            (
+                _type,
                 instance,
                 new CacheInterceptor(_cacheMethodUtility)
             );
