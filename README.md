@@ -1,6 +1,6 @@
 # Simple-proxy-cache
 
-Using AOP and proxy pattern to cache method result (both sync and async) all using attributes over method.
+Using AOP and proxy pattern to cache method result (both sync and async) all using attributes over method. Under the hood, this library will cache result of method given a sequence of arguments. So if we call the method with the same sequence of arguments then we just use the cached result.
 
 Add `[CacheResult]` or `[InvalidateCache]` attribute over interface methods:
 
