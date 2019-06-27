@@ -30,4 +30,9 @@ var cachedFoo = CacheInterceptorBuilder.New<IFoo>()
   .WithProxyGenerator(proxyGenerator)
   .WithStore(new SimpleMethodMemoryCache())
   .Build(new Foo());
+  
+cachedFoo.Handle("Hello world!");
+
+// The target method will not get called because we cache this method with "Hello world!" argument
+cachedFoo.Handle("Hello world!");
 ```
