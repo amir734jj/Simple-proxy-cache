@@ -26,11 +26,16 @@ Create a cache proxy instance (use `SimpleMethodMemoryCache` or an interface tha
 // Re-use the same instance
 var proxyGenerator = new ProxyGenerator();
 
+// Create instance of Foo
+Foo target = new Foo();
+
+// Create cached proxy instance
 var cachedFoo = CacheInterceptorBuilder.New<IFoo>()
   .WithProxyGenerator(proxyGenerator)
   .WithStore(new SimpleMethodMemoryCache())
-  .Build(new Foo());
+  .Build(target);
   
+// This will call the target method
 cachedFoo.Handle("Hello world!");
 
 // The target method will not get called because we cached this method with "Hello world!" argument
