@@ -1,9 +1,9 @@
 # Simple-proxy-cache
 
-#### Description
+### Description
 Using AOP and proxy pattern to cache method result (both sync and async) all using attributes over method. Under the hood, this library will cache result of method given a sequence of arguments. So if we call the method with the same sequence of arguments then we just use the cached result.
 
-#### Example
+### Example
 Add `[CacheResult]` or `[InvalidateCache]` attribute over interface methods:
 
 ```csharp
@@ -44,5 +44,5 @@ cachedFoo.Get("Hello world!");
 cachedFoo.Get("Hello world!");
 ```
 
-#### Notes
+### Notes
 - Note that if method does not have any attributes then it will not be proxied or caches.
