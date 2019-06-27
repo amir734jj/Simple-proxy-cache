@@ -8,16 +8,16 @@ Add `[CacheResult]` or `[InvalidateCache]` attribute over interface methods:
 public interface IFoo
 {
     [CacheResult]
-    string Handle(string id);
+    string Get(string id);
 
     [CacheResult]
-    Task<string> HandleAsync(string id);
+    Task<string> GetAsync(string id);
     
     [InvalidateCache]
-    void Delete();
+    void Delete(string id);
 
     [InvalidateCache]
-    Task DeleteAsync();
+    Task DeleteAsync(string id);
 }
 ```
 
@@ -36,8 +36,8 @@ var cachedFoo = CacheInterceptorBuilder.New<IFoo>()
   .Build(target);
   
 // This will call the target method
-cachedFoo.Handle("Hello world!");
+cachedFoo.Get("Hello world!");
 
 // The target method will not get called because we cached this method with "Hello world!" argument
-cachedFoo.Handle("Hello world!");
+cachedFoo.Get("Hello world!");
 ```
