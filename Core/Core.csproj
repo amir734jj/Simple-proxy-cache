@@ -3,7 +3,13 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
         <RootNamespace>SimpleProxyCache</RootNamespace>
-        <LangVersion>latest</LangVersion>
+        <LangVersion>7.1</LangVersion>
+        <AssemblyName>SimpleProxyCache</AssemblyName>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Description>Minor improvements</Description>
+        <PackageProjectUrl>https://github.com/amir734jj/Simple-proxy-cache</PackageProjectUrl>
+        <Version>1.0.1</Version>
+        <PackageReleaseNotes>Bug fixes</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
