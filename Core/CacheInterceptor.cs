@@ -1,8 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Castle.DynamicProxy;
-using SimpleProxyCache.Attributes;
-using SimpleProxyCache.Extensions;
+using SimpleProxyCache.Enums;
 using SimpleProxyCache.Interfaces;
+using SimpleProxyCache.Logic;
 
 namespace SimpleProxyCache
 {
@@ -23,31 +24,28 @@ namespace SimpleProxyCache
         {
             var (method, arguments) = (invocation.Method, invocation.Arguments);
 
-            // Cache result
-            if (method.HasCustomAttribute<CacheResultAttribute>())
+            switch (DetermineInvocationType.Resolve(method))
             {
-                if (_cacheMethodUtility.TryGet(method, arguments, out var result))
-                {
-                    invocation.ReturnValue = result;
-                }
-                else
-                {
+                case InvocationTypeEnum.Cache:
+                    if (_cacheMethodUtility.TryGet(method, arguments, out var result))
+                    {
+                        invocation.ReturnValue = result;
+                    }
+                    else
+                    {
+                        invocation.Proceed();
+                        _cacheMethodUtility.Set(method, arguments, invocation.ReturnValue);
+                    }
+                    break;
+                case InvocationTypeEnum.Invalidate:
+                    _cacheMethodUtility.Invalidate();
                     invocation.Proceed();
-
-                    _cacheMethodUtility.Set(method, arguments, invocation.ReturnValue);
-                }
-            }
-            // Invalidate the cache
-            else if (method.HasCustomAttribute<InvalidateCacheAttribute>())
-            {
-                _cacheMethodUtility.Invalidate();
-
-                invocation.Proceed();
-            }
-            else
-            {
-                // Nothing needed to be done
-                invocation.Proceed();
+                    break;
+                case InvocationTypeEnum.None:
+                    invocation.Proceed();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -59,9 +57,11 @@ namespace SimpleProxyCache
         {
             var method = invocation.Method;
 
-            if (method.HasCustomAttribute<InvalidateCacheAttribute>())
+            switch (DetermineInvocationType.Resolve(method))
             {
-                _cacheMethodUtility.Invalidate();
+                case InvocationTypeEnum.Invalidate:
+                    _cacheMethodUtility.Invalidate();
+                    break;
             }
             
             invocation.Proceed();
@@ -71,35 +71,34 @@ namespace SimpleProxyCache
         {
             var (method, arguments) = (invocation.Method, invocation.Arguments);
 
-            // Cache result
-            if (method.HasCustomAttribute<CacheResultAttribute>())
+            switch (DetermineInvocationType.Resolve(method))
             {
-                if (_cacheMethodUtility.TryGet(method, arguments, out var result))
-                {
-                    invocation.ReturnValue = Task.FromResult((TResult)result);
-                }
-                else
-                {
-                    invocation.Proceed();
+                case InvocationTypeEnum.Cache:
+                    if (_cacheMethodUtility.TryGet(method, arguments, out var result))
+                    {
+                        invocation.ReturnValue = Task.FromResult((TResult)result);
+                    }
+                    else
+                    {
+                        invocation.Proceed();
 
-                    var taskResult = ((Task<TResult>) invocation.ReturnValue).Result;
+                        var taskResult = ((Task<TResult>) invocation.ReturnValue).Result;
 
-                    _cacheMethodUtility.Set(method, arguments, taskResult);
+                        _cacheMethodUtility.Set(method, arguments, taskResult);
                     
-                    invocation.ReturnValue = Task.FromResult(taskResult);
-                }
-            }
-            // Invalidate the cache
-            else if (method.HasCustomAttribute<InvalidateCacheAttribute>())
-            {
-                _cacheMethodUtility.Invalidate();
+                        invocation.ReturnValue = Task.FromResult(taskResult);
+                    }
+                    break;
+                case InvocationTypeEnum.Invalidate:
+                    _cacheMethodUtility.Invalidate();
 
-                invocation.Proceed();
-            }
-            else
-            {
-                // Nothing needed to be done
-                invocation.Proceed();
+                    invocation.Proceed();
+                    break;
+                case InvocationTypeEnum.None:
+                    invocation.Proceed();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
