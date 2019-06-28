@@ -44,6 +44,11 @@ namespace SimpleProxyCache
 
                 invocation.Proceed();
             }
+            else
+            {
+                // Nothing needed to be done
+                invocation.Proceed();
+            }
         }
 
         /// <summary>
@@ -89,6 +94,11 @@ namespace SimpleProxyCache
             {
                 _cacheMethodUtility.Invalidate();
 
+                invocation.Proceed();
+            }
+            else
+            {
+                // Nothing needed to be done
                 invocation.Proceed();
             }
         }

@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Castle.Core" Version="4.4.0" />
       <PackageReference Include="Castle.Core.AsyncInterceptor" Version="1.7.0" />
     </ItemGroup>
 
