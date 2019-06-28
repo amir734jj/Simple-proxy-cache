@@ -3,7 +3,7 @@
 [NuGet](https://www.nuget.org/packages/SimpleProxyCache/)
 
 ### Description
-Using AOP and proxy pattern to cache method result (both sync and async) all using attributes over method. Under the hood, this library will cache result of method given a sequence of arguments. So if we call the method with the same sequence of arguments for the second time then we just use the cached result.
+Using AOP and proxy pattern to cache method result (both sync and async) all using attributes over method. Under the hood, this library will cache result of method given a sequence of arguments. So if we call the method with the same sequence of arguments for the second time then we just use the cached result instead.
 
 ### Example
 Add `[CacheResult]` or `[InvalidateCache]` attribute over interface methods:
