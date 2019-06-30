@@ -6,7 +6,7 @@ using SimpleProxyCache.Interfaces;
 
 namespace SimpleProxyCache.Logic
 {
-    public class SimpleMethodMemoryCache : ICacheMethodUtility
+    internal class SimpleMethodMemoryCache : ICacheMethodUtility
     {
         private ConcurrentDictionary<MethodInfo, ConcurrentDictionary<object[], object>> _cache;
 

@@ -36,7 +36,8 @@ Foo target = new Foo();
 // Create cached proxy instance
 var cachedFoo = CacheInterceptorBuilder.New<IFoo>()
   .WithProxyGenerator(proxyGenerator)
-  .WithStore(new SimpleMethodMemoryCache())
+  .WithDefaultStore(new SimpleMethodMemoryCache())
+  .WithDefaultInvocationTypeResolver()
   .Build(target);
   
 // This will call the target method

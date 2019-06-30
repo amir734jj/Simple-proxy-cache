@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace SimpleProxyCache.Extensions
 {
-    internal static class MethodInfoExtension
+    public static class MethodInfoExtension
     {
         /// <summary>
         ///     Test whether MethodInfo has custom attribute or not

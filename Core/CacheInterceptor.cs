@@ -7,12 +7,14 @@ using SimpleProxyCache.Logic;
 
 namespace SimpleProxyCache
 {
-    public class CacheInterceptor : IAsyncInterceptor
+    internal class CacheInterceptor : IAsyncInterceptor
     {
         private readonly ICacheMethodUtility _cacheMethodUtility;
+        private readonly IInvocationTypeResolver _invocationTypeResolver;
 
-        public CacheInterceptor(ICacheMethodUtility cacheMethodUtility)
+        public CacheInterceptor(IInvocationTypeResolver invocationTypeResolver, ICacheMethodUtility cacheMethodUtility)
         {
+            _invocationTypeResolver = invocationTypeResolver;
             _cacheMethodUtility = cacheMethodUtility;
         }
         
@@ -25,7 +27,7 @@ namespace SimpleProxyCache
         {
             var (method, arguments) = (invocation.Method, invocation.Arguments);
 
-            switch (DetermineInvocationType.Resolve(method))
+            switch (_invocationTypeResolver.Resolve(method))
             {
                 case InvocationTypeEnum.Cache:
                     if (_cacheMethodUtility.TryGet(method, arguments, out var result))
@@ -59,7 +61,7 @@ namespace SimpleProxyCache
         {
             var method = invocation.Method;
 
-            switch (DetermineInvocationType.Resolve(method))
+            switch (_invocationTypeResolver.Resolve(method))
             {
                 case InvocationTypeEnum.Invalidate:
                     _cacheMethodUtility.Invalidate();
@@ -79,7 +81,7 @@ namespace SimpleProxyCache
         {
             var (method, arguments) = (invocation.Method, invocation.Arguments);
 
-            switch (DetermineInvocationType.Resolve(method))
+            switch (_invocationTypeResolver.Resolve(method))
             {
                 case InvocationTypeEnum.Cache:
                     if (_cacheMethodUtility.TryGet(method, arguments, out var result))

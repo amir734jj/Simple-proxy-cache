@@ -40,7 +40,8 @@ namespace Core.Tests
 
             var cachedFoo = CacheInterceptorBuilder.New<IFoo>()
                 .WithProxyGenerator(proxyGenerator)
-                .WithStore(new SimpleMethodMemoryCache())
+                .WithDefaultStore()
+                .WithDefaultInvocationTypeResolver()
                 .Build(fooMock.Object);
 
             cachedFoo.Handle("Hello world!");
@@ -64,7 +65,8 @@ namespace Core.Tests
 
             var cachedFoo = CacheInterceptorBuilder.New<IFoo>()
                 .WithProxyGenerator(proxyGenerator)
-                .WithStore(new SimpleMethodMemoryCache())
+                .WithDefaultStore()
+                .WithDefaultInvocationTypeResolver()
                 .Build(fooMock.Object);
 
             await cachedFoo.HandleAsync("Hello world!");
@@ -92,7 +94,8 @@ namespace Core.Tests
 
             var cachedFoo = CacheInterceptorBuilder.New<IFoo>()
                 .WithProxyGenerator(proxyGenerator)
-                .WithStore(new SimpleMethodMemoryCache())
+                .WithDefaultStore()
+                .WithDefaultInvocationTypeResolver()
                 .Build(fooMock.Object);
 
             cachedFoo.Handle("Hello world!");
@@ -122,7 +125,8 @@ namespace Core.Tests
 
             var cachedFoo = CacheInterceptorBuilder.New<IFoo>()
                 .WithProxyGenerator(proxyGenerator)
-                .WithStore(new SimpleMethodMemoryCache())
+                .WithDefaultStore()
+                .WithDefaultInvocationTypeResolver()
                 .Build(fooMock.Object);
 
             await cachedFoo.HandleAsync("Hello world!");
