@@ -7,7 +7,7 @@ namespace SimpleProxyCache.Builders
 {
     public static class CacheInterceptorBuilder
     {
-        public static CacheInterceptorBuilderProxyGenerator<T> New<T>()
+        public static CacheInterceptorBuilderProxyGenerator<T> New<T>() where T : class
         {
             var type = typeof(T);
 
@@ -16,61 +16,49 @@ namespace SimpleProxyCache.Builders
                 throw new TypeNotInterfaceException(type);
             }
 
-            return new CacheInterceptorBuilderProxyGenerator<T>(type);
+            return new CacheInterceptorBuilderProxyGenerator<T>();
         }
     }
 
-    public class CacheInterceptorBuilderProxyGenerator<T>
+    public class CacheInterceptorBuilderProxyGenerator<T> where T : class
     {
-        private readonly Type _type;
-
-        public CacheInterceptorBuilderProxyGenerator(Type type)
-        {
-            _type = type;
-        }
-
         public CacheInterceptorBuilderDal<T> WithProxyGenerator(ProxyGenerator proxyGenerator)
         {
-            return new CacheInterceptorBuilderDal<T>(_type, proxyGenerator);
+            return new CacheInterceptorBuilderDal<T>(proxyGenerator);
         }
     }
 
-    public class CacheInterceptorBuilderDal<T>
+    public class CacheInterceptorBuilderDal<T> where T : class
     {
-        private readonly Type _type;
         private readonly ProxyGenerator _proxyGenerator;
 
-        public CacheInterceptorBuilderDal(Type type, ProxyGenerator proxyGenerator)
+        public CacheInterceptorBuilderDal(ProxyGenerator proxyGenerator)
         {
-            _type = type;
             _proxyGenerator = proxyGenerator;
         }
 
         public CacheInterceptorBuilderFinalize<T> WithStore(ICacheMethodUtility cacheMethodUtility)
         {
-            return new CacheInterceptorBuilderFinalize<T>(_type, _proxyGenerator, cacheMethodUtility);
+            return new CacheInterceptorBuilderFinalize<T>(_proxyGenerator, cacheMethodUtility);
         }
     }
 
-    public class CacheInterceptorBuilderFinalize<T>
+    public class CacheInterceptorBuilderFinalize<T> where T : class
     {
-        private readonly Type _type;
         private readonly ProxyGenerator _proxyGenerator;
         private readonly ICacheMethodUtility _cacheMethodUtility;
 
-        public CacheInterceptorBuilderFinalize(Type type, ProxyGenerator proxyGenerator,
+        public CacheInterceptorBuilderFinalize(ProxyGenerator proxyGenerator,
             ICacheMethodUtility cacheMethodUtility)
         {
-            _type = type;
             _proxyGenerator = proxyGenerator;
             _cacheMethodUtility = cacheMethodUtility;
         }
 
         public T Build<TS>(TS instance) where TS : T
         {
-            return (T) _proxyGenerator.CreateInterfaceProxyWithTargetInterface
+            return _proxyGenerator.CreateInterfaceProxyWithTargetInterface<T>
             (
-                _type,
                 instance,
                 new CacheInterceptor(_cacheMethodUtility)
             );

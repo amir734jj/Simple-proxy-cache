@@ -16,6 +16,7 @@ namespace SimpleProxyCache
             _cacheMethodUtility = cacheMethodUtility;
         }
         
+        /// <inheritdoc />
         /// <summary>
         ///     Sync interceptor
         /// </summary>
@@ -49,6 +50,7 @@ namespace SimpleProxyCache
             }
         }
 
+        /// <inheritdoc />
         /// <summary>
         ///     No caching here. Can only bust the cache
         /// </summary>
@@ -62,6 +64,12 @@ namespace SimpleProxyCache
                 case InvocationTypeEnum.Invalidate:
                     _cacheMethodUtility.Invalidate();
                     break;
+                case InvocationTypeEnum.Cache:
+                    break;
+                case InvocationTypeEnum.None:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
             
             invocation.Proceed();
